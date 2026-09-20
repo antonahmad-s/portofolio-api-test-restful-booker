@@ -8,10 +8,10 @@ This repository demonstrates senior QA engineering practices beyond basic endpoi
 
 - API client abstraction
 - Positive and negative testing
-- Authentication
-- CRUD coverage
+- Authentication and authorization
+- CRUD and partial-update coverage
 - JSON Schema validation
-- Data-driven test data helpers
+- Reusable test data
 - End-to-end API lifecycle testing
 - Environment configuration
 - Linting
@@ -35,6 +35,7 @@ POST   /booking
 PUT    /booking/{id}
 PATCH  /booking/{id}
 DELETE /booking/{id}
+GET    /ping
 ```
 
 > The public service is a learning/test API. Its data and behavior can change, so tests intentionally focus on documented contracts and explicit assertions.
@@ -64,12 +65,13 @@ Restful Booker
 .github/workflows/       CI pipeline
 src/clients/             API abstraction
 src/config/              Environment configuration
-src/helpers/              Test data and schema utilities
-src/schemas/              JSON schemas
-tests/auth/               Authentication tests
-tests/booking/            CRUD + negative tests
+src/helpers/             Test data and schema utilities
+src/schemas/             JSON schemas
+tests/auth/              Authentication tests
+tests/booking/            CRUD, authorization + negative tests
+tests/health/             Health/smoke tests
 tests/e2e/                End-to-end lifecycle
-reports/                   Generated reports
+reports/                  Generated reports
 ```
 
 ## Prerequisites
@@ -81,7 +83,7 @@ reports/                   Generated reports
 
 ```bash
 git clone <your-repository-url>
-cd senior-qa-api-automation
+cd portofolio-api-test-restful-booker
 npm install
 cp .env.example .env
 ```
@@ -126,11 +128,16 @@ reports/api-report.json
 - Create booking
 - Retrieve booking
 - List bookings
-- Update booking
-- Patch booking
-- Delete booking
-- Unknown resource
-- Invalid authorization
+- Full update with PUT
+- Partial update with PATCH
+- Unknown/invalid booking IDs
+- Authorization boundaries for PUT, PATCH and DELETE
+- Delete verification
+- JSON Schema validation for booking responses
+
+### Health
+
+- API reachability through `GET /ping`
 
 ### E2E
 
@@ -138,9 +145,11 @@ reports/api-report.json
 Login
   -> Create booking
   -> Get booking
-  -> Update booking
+  -> Full update (PUT)
+  -> Partial update (PATCH)
+  -> Verify persisted changes
   -> Delete booking
-  -> Verify deletion
+  -> Verify 404 after deletion
 ```
 
 ## Senior QA Focus
@@ -154,6 +163,7 @@ The framework is designed to demonstrate:
 5. Deterministic test setup where practical.
 6. CI execution on every pull request and push.
 7. Test reporting as a build artifact.
+8. Explicit authorization coverage for protected operations.
 
 ## Known limitations
 
