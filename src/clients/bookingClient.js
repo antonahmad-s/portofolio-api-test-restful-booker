@@ -5,6 +5,11 @@ const jsonHeaders = {
   Accept: 'application/json',
 };
 
+const authHeaders = (token) => ({
+  ...jsonHeaders,
+  Cookie: `token=${token}`,
+});
+
 export const bookingClient = {
   async listBookings() {
     return httpClient.get('/booking', {
@@ -25,39 +30,24 @@ export const bookingClient = {
   },
 
   async updateBooking(id, token, payload) {
-    return httpClient.put(`/booking/${id}`, payload, {
-      headers: {
-        ...jsonHeaders,
-        Cookie: `token=${token}`,
-      },
-    });
+    const config = token ? { headers: authHeaders(token) } : {};
+    return httpClient.put(`/booking/${id}`, payload, config);
   },
 
-  async partialUpdateBooking(bookingId, token, payload) {
-    return httpClient.patch(`/booking/${bookingId}`, payload, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Cookie: `token=${token}`,
-      },
-    });
+  async partialUpdateBooking(id, token, payload) {
+    const config = token ? { headers: authHeaders(token) } : {};
+    return httpClient.patch(`/booking/${id}`, payload, config);
   },
 
   async patchBooking(id, token, payload) {
-    return httpClient.patch(`/booking/${id}`, payload, {
-      headers: {
-        ...jsonHeaders,
-        Cookie: `token=${token}`,
-      },
-    });
+    return bookingClient.partialUpdateBooking(id, token, payload);
   },
 
   async deleteBooking(id, token) {
-    return httpClient.delete(`/booking/${id}`, {
-      headers: {
-        Accept: 'application/json',
-        Cookie: `token=${token}`,
-      },
-    });
+    const config = token
+      ? { headers: { Accept: 'application/json', Cookie: `token=${token}` } }
+      : { headers: { Accept: 'application/json' } };
+
+    return httpClient.delete(`/booking/${id}`, config);
   },
 };
