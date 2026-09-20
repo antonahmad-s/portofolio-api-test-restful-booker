@@ -13,9 +13,7 @@ export function createBookingPayload(overrides = {}) {
   };
 }
 
-export const partialUpdateBookingPayload = () => {
-  return {
-    firstname: 'Anton',
-    lastname: 'Ahmad',
-  };
+export const partialUpdateBookingPayload = {
+  firstname: 'James',
+  lastname: 'Brown',
 };
