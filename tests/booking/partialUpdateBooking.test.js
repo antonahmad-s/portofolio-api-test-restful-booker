@@ -6,6 +6,8 @@ import {
   createBookingPayload,
   partialUpdateBookingPayload,
 } from '../../src/helpers/testData.js';
+import { bookingSchema } from '../../src/schemas/bookingSchema.js';
+import { assertSchema } from '../../src/helpers/schemaValidator.js';
 
 describe('Booking - partial update', () => {
   let token;
@@ -16,9 +18,7 @@ describe('Booking - partial update', () => {
       config.username,
       config.password
     );
-    expect(authResponse.status, JSON.stringify(authResponse.data)).to.equal(
-      200
-    );
+    expect(authResponse.status, JSON.stringify(authResponse.data)).to.equal(200);
     token = authResponse.data.token;
     expect(token).to.be.a('string').and.not.empty;
 
@@ -37,12 +37,12 @@ describe('Booking - partial update', () => {
     const response = await bookingClient.partialUpdateBooking(
       bookingId,
       token,
-      partialUpdateBookingPayload()
+      partialUpdateBookingPayload
     );
 
     expect(response.status, JSON.stringify(response.data)).to.equal(200);
-
-    expect(response.data.firstname).to.equal('Anton');
-    expect(response.data.lastname).to.equal('Ahmad');
+    expect(response.data.firstname).to.equal('James');
+    expect(response.data.lastname).to.equal('Brown');
+    assertSchema(bookingSchema, response.data);
   });
 });
