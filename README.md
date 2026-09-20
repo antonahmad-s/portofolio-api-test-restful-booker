@@ -160,8 +160,8 @@ Some negative tests allow a small set of expected HTTP outcomes where the public
 
 ## Author
 
-Anton Ahmad
-Senior QA / Test Automation
+Anton Ahmad Susilo
+QA Engineer / Test Automation
 
 GitHub: https://github.com/antonahmad-s
 
